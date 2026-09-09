@@ -1,297 +1,326 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>VMAX — Maximum Meme Energy on Solana</title>
-  <meta name="description" content="VMAX is a community-first Solana memecoin built for speed, memes and maximum energy. Launching on Pump.fun.">
-  <meta property="og:title" content="VMAX — Maximum Meme Energy">
-  <meta property="og:description" content="Built on Solana. Launching on Pump.fun. CA coming at launch.">
-  <meta property="og:type" content="website">
-  <meta property="og:url" content="https://vmaxsol.com">
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="theme-color" content="#09090b">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#0b0b0d" />
+  <title>VMAX — Maximum Meme Energy</title>
+  <meta name="description" content="VMAX is a community-powered Solana memecoin built for speed, chaos and maximum energy." />
   <style>
-    :root{
-      --bg:#09090b;
-      --panel:#111116;
-      --panel2:#17171d;
-      --text:#f5f5f5;
-      --muted:#a9a9b3;
-      --line:rgba(255,255,255,.12);
-      --acid:#d8ff3e;
-      --acid2:#8cff00;
-      --violet:#8b5cf6;
-      --shadow:0 24px 80px rgba(0,0,0,.45);
-    }
-    *{box-sizing:border-box}
-    html{scroll-behavior:smooth}
-    body{
-      margin:0;
-      color:var(--text);
-      background:
-        radial-gradient(circle at 20% 0%,rgba(139,92,246,.14),transparent 35%),
-        radial-gradient(circle at 80% 20%,rgba(216,255,62,.09),transparent 30%),
-        var(--bg);
-      font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
-      overflow-x:hidden;
-    }
-    a{color:inherit;text-decoration:none}
-    button{font:inherit}
-    .noise{
-      position:fixed;inset:0;pointer-events:none;opacity:.04;z-index:100;
-      background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.9'/%3E%3C/svg%3E");
-    }
-    .wrap{width:min(1180px,calc(100% - 32px));margin:auto}
-    .topbar{
-      position:sticky;top:0;z-index:50;backdrop-filter:blur(18px);
-      background:rgba(9,9,11,.72);border-bottom:1px solid var(--line)
-    }
-    .nav{height:72px;display:flex;align-items:center;justify-content:space-between;gap:20px}
-    .brand{display:flex;align-items:center;gap:11px;font-weight:950;letter-spacing:-.04em}
-    .mark{
-      width:38px;height:38px;border-radius:12px;display:grid;place-items:center;
-      background:linear-gradient(135deg,var(--acid),#fff);color:#050505;font-weight:1000;
-      box-shadow:0 0 30px rgba(216,255,62,.22)
-    }
-    .links{display:flex;gap:22px;color:var(--muted);font-size:14px;font-weight:700}
-    .links a:hover{color:var(--text)}
-    .navcta{
-      padding:10px 16px;border-radius:999px;border:1px solid var(--line);
-      background:var(--text);color:#09090b;font-weight:900
-    }
-    .hero{
-      min-height:calc(100vh - 72px);display:grid;grid-template-columns:1.1fr .9fr;
-      gap:56px;align-items:center;padding:76px 0 54px
-    }
-    .eyebrow{display:flex;align-items:center;gap:10px;color:var(--acid);font-weight:900;letter-spacing:.12em;font-size:12px;text-transform:uppercase}
-    .dot{width:8px;height:8px;border-radius:50%;background:var(--acid);box-shadow:0 0 18px var(--acid)}
-    h1{font-size:clamp(64px,10vw,148px);line-height:.78;margin:18px 0 26px;letter-spacing:-.085em;font-weight:1000}
-    h1 .stroke{-webkit-text-stroke:1px rgba(255,255,255,.65);color:transparent}
-    .lead{max-width:700px;font-size:clamp(18px,2vw,22px);line-height:1.55;color:var(--muted)}
-    .hero-actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:34px}
-    .btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;padding:15px 20px;border-radius:14px;font-weight:950;border:1px solid var(--line);transition:.2s transform,.2s background,.2s border}
-    .btn:hover{transform:translateY(-2px)}
-    .btn.primary{background:var(--acid);color:#080808;border-color:var(--acid);box-shadow:0 12px 40px rgba(216,255,62,.16)}
-    .btn.secondary{background:rgba(255,255,255,.04)}
-    .micro{margin-top:14px;color:#74747e;font-size:12px}
-    .card{
-      border:1px solid var(--line);background:linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,.025));
-      border-radius:28px;padding:24px;box-shadow:var(--shadow);position:relative;overflow:hidden
-    }
-    .coin{
-      aspect-ratio:1;border-radius:26px;
-      background:
-        radial-gradient(circle at 50% 40%,rgba(216,255,62,.18),transparent 34%),
-        linear-gradient(145deg,#15151b,#0c0c10);
-      border:1px solid rgba(255,255,255,.1);
-      display:grid;place-items:center;position:relative;overflow:hidden
-    }
-    .coin:before,.coin:after{
-      content:"";position:absolute;border-radius:50%;border:1px solid rgba(216,255,62,.2)
-    }
-    .coin:before{width:70%;height:70%}
-    .coin:after{width:88%;height:88%}
-    .vmark{font-size:clamp(90px,15vw,180px);font-weight:1000;letter-spacing:-.12em;color:var(--acid);filter:drop-shadow(0 0 28px rgba(216,255,62,.22))}
-    .badge{position:absolute;top:20px;right:20px;padding:8px 11px;border-radius:999px;background:#fff;color:#09090b;font-size:11px;font-weight:950}
-    .ticker{display:flex;justify-content:space-between;gap:18px;margin-top:18px;color:var(--muted);font-size:13px}
-    .ticker b{color:var(--text)}
-    .marquee{border-block:1px solid var(--line);overflow:hidden;background:#0d0d11}
-    .track{display:flex;width:max-content;animation:scroll 22s linear infinite}
-    .track span{padding:15px 30px;font-size:13px;font-weight:950;letter-spacing:.08em;color:#d8d8df}
-    .track i{color:var(--acid);font-style:normal}
-    @keyframes scroll{to{transform:translateX(-50%)}}
-    section{padding:100px 0}
-    .section-head{display:flex;justify-content:space-between;gap:30px;align-items:end;margin-bottom:40px}
-    .kicker{font-size:12px;color:var(--acid);font-weight:950;letter-spacing:.13em;text-transform:uppercase}
-    h2{font-size:clamp(42px,6vw,78px);line-height:.92;letter-spacing:-.06em;margin:10px 0 0}
-    .section-copy{max-width:500px;color:var(--muted);line-height:1.7}
-    .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
-    .stat{padding:26px;border-radius:20px;border:1px solid var(--line);background:rgba(255,255,255,.025)}
-    .stat .big{font-size:42px;font-weight:1000;letter-spacing:-.05em}
-    .stat p{margin:8px 0 0;color:var(--muted)}
-    .ca{
-      margin-top:18px;padding:18px;border:1px dashed rgba(216,255,62,.45);border-radius:16px;
-      display:flex;align-items:center;justify-content:space-between;gap:16px;background:rgba(216,255,62,.04)
-    }
-    .ca code{color:var(--acid);font-weight:900;letter-spacing:.04em}
-    .road{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
-    .step{padding:26px;border:1px solid var(--line);border-radius:22px;background:var(--panel);min-height:230px}
-    .num{color:var(--acid);font-size:13px;font-weight:950}
-    .step h3{font-size:28px;margin:48px 0 12px;letter-spacing:-.04em}
-    .step p{color:var(--muted);line-height:1.6}
-    .launch{
-      border:1px solid rgba(216,255,62,.3);
-      background:linear-gradient(135deg,rgba(216,255,62,.09),rgba(139,92,246,.08));
-      padding:48px;border-radius:30px;display:flex;justify-content:space-between;gap:32px;align-items:center
-    }
-    .launch h3{font-size:clamp(38px,5vw,66px);line-height:.92;letter-spacing:-.06em;margin:0 0 14px}
-    .launch p{color:var(--muted);max-width:620px}
-    footer{padding:38px 0 50px;border-top:1px solid var(--line);color:#74747e}
-    .foot{display:flex;justify-content:space-between;gap:20px;align-items:center}
-    .socials{display:flex;gap:16px}
-    .socials a{color:var(--muted);font-weight:800}
-    .socials a:hover{color:var(--text)}
-    @media(max-width:900px){
-      .links{display:none}
-      .hero{grid-template-columns:1fr;padding-top:54px}
-      .hero .card{max-width:620px}
-      .grid3,.road{grid-template-columns:1fr}
-      .section-head,.launch,.foot{align-items:flex-start;flex-direction:column}
-      section{padding:76px 0}
-    }
-    @media(max-width:520px){
-      .wrap{width:min(100% - 22px,1180px)}
-      .nav{height:64px}
-      .navcta{padding:9px 12px;font-size:12px}
-      .hero{padding-top:38px;gap:34px}
-      h1{font-size:64px}
-      .btn{width:100%}
-      .ca{align-items:flex-start;flex-direction:column}
-      .launch{padding:28px}
-    }
-  </style>
+:root {
+  --bg: #0a0a0c;
+  --panel: #121216;
+  --panel-2: #17171c;
+  --text: #f5f5ef;
+  --muted: #aaaab4;
+  --line: rgba(255,255,255,.12);
+  --acid: #d8ff35;
+  --acid-2: #b9e817;
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  color: var(--text);
+  background: var(--bg);
+  font-family: Arial, Helvetica, sans-serif;
+  overflow-x: hidden;
+}
+a { color: inherit; text-decoration: none; }
+button { font: inherit; }
+
+.noise {
+  position: fixed; inset: 0; pointer-events: none; z-index: 10; opacity: .035;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.9'/%3E%3C/svg%3E");
+}
+
+.topbar {
+  height: 78px; display: flex; align-items: center; justify-content: space-between;
+  padding: 0 5vw; border-bottom: 1px solid var(--line); position: sticky; top: 0;
+  backdrop-filter: blur(16px); background: rgba(10,10,12,.82); z-index: 9;
+}
+.brand { display: inline-flex; align-items: center; gap: 10px; font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif; letter-spacing: -.04em; }
+.brand-mark { width: 34px; height: 34px; display: grid; place-items: center; background: var(--acid); color: #070707; transform: skew(-7deg); }
+.nav { display: flex; gap: 30px; font-size: 13px; font-weight: 700; }
+.nav a { color: #c7c7ce; }
+.nav a:hover { color: var(--acid); }
+.nav-actions { display: flex; align-items: center; gap: 12px; }
+.icon-link { border: 1px solid var(--line); width: 38px; height: 38px; display: grid; place-items: center; font-weight: 800; }
+.buy-small { background: var(--acid); color: #080808; padding: 12px 16px; font-size: 12px; font-weight: 900; }
+
+.hero {
+  min-height: calc(100vh - 78px); display: grid; grid-template-columns: 1.05fr .95fr;
+  padding: 7vw 5vw 5vw; gap: 4vw; align-items: center; position: relative;
+}
+.hero::before { content:""; position:absolute; inset:auto auto 0 0; width:42vw; height:1px; background:linear-gradient(90deg,var(--acid),transparent); }
+.eyebrow { display:flex; align-items:center; gap:10px; color:#c7c7ce; font-size:12px; letter-spacing:.17em; font-weight:800; }
+.eyebrow span { width: 34px; height: 2px; background: var(--acid); }
+h1,h2,h3 { font-family:Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif; margin:0; text-transform:uppercase; }
+h1 { font-size: clamp(58px, 8.6vw, 142px); line-height:.82; letter-spacing:-.075em; margin: 28px 0; }
+h1 em { color: var(--acid); font-style: normal; }
+.hero-text { max-width: 620px; color: #b9b9c2; line-height:1.7; font-size: clamp(16px,1.3vw,20px); }
+.hero-buttons { display:flex; flex-wrap:wrap; gap:12px; margin:32px 0; }
+.btn { display:inline-flex; align-items:center; justify-content:center; gap:16px; padding:17px 22px; font-size:13px; font-weight:900; letter-spacing:.03em; }
+.btn-primary { background:var(--acid); color:#090909; box-shadow:0 0 0 1px var(--acid); }
+.btn-primary:hover { transform:translateY(-2px); background:#e4ff66; }
+.btn-ghost { border:1px solid var(--line); }
+.btn-ghost:hover { border-color:#777; }
+
+.contract-box { max-width:660px; border:1px solid var(--line); background:rgba(255,255,255,.025); padding:14px 14px 14px 18px; display:flex; align-items:center; justify-content:space-between; gap:14px; }
+.contract-box small { color:#787882; display:block; font-weight:800; font-size:9px; letter-spacing:.16em; margin-bottom:6px; }
+.contract-box code { font-family: ui-monospace,SFMono-Regular,Consolas,monospace; font-size:12px; color:#d2d2d7; word-break:break-all; }
+.contract-box button { border:0; background:#232329; color:#fff; padding:11px 15px; cursor:pointer; font-weight:800; font-size:11px; }
+.contract-box button:hover { background:var(--acid); color:#090909; }
+
+.hero-art { position:relative; min-height:580px; display:grid; place-items:center; }
+.coin { width:min(27vw,390px); aspect-ratio:1; border-radius:50%; display:grid; place-items:center; position:relative; z-index:3; background:radial-gradient(circle at 32% 28%,#f4ff92 0 10%,#d8ff35 30%,#94b800 70%,#5f7200 100%); border:12px solid #1a1a1c; box-shadow:0 0 0 2px var(--acid), 0 30px 90px rgba(216,255,53,.2); transform:rotate(-9deg); }
+.coin::after { content:""; position:absolute; inset:14%; border:2px dashed rgba(0,0,0,.45); border-radius:50%; }
+.coin-inner { width:62%; aspect-ratio:1; border-radius:50%; display:grid; place-items:center; background:#09090b; color:var(--acid); font:clamp(100px,11vw,180px)/1 'Archivo Black'; letter-spacing:-.12em; }
+.speed-ring { position:absolute; border:1px solid rgba(216,255,53,.24); border-radius:50%; animation:spin 12s linear infinite; }
+.ring-one { width:72%; aspect-ratio:1; }
+.ring-two { width:88%; aspect-ratio:1; border-style:dashed; animation-duration:18s; animation-direction:reverse; }
+.ring-three { width:104%; aspect-ratio:1; opacity:.35; }
+.speed-ring::before { content:""; position:absolute; width:10px; height:10px; background:var(--acid); border-radius:50%; top:8%; left:18%; box-shadow:0 0 18px var(--acid); }
+@keyframes spin { to { transform:rotate(360deg); } }
+.tag { position:absolute; z-index:4; background:#f4f4ee; color:#090909; padding:10px 14px; font-family:Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif; font-size:12px; transform:rotate(-5deg); }
+.tag-one { top:16%; right:2%; }
+.tag-two { bottom:17%; left:4%; background:var(--acid); transform:rotate(5deg); }
+
+.ticker-strip { border-top:1px solid var(--line); border-bottom:1px solid var(--line); overflow:hidden; background:#0e0e11; }
+.ticker-track { width:max-content; display:flex; gap:26px; align-items:center; padding:18px 0; animation:marquee 25s linear infinite; font-family:Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif; font-size:14px; }
+.ticker-track b { color:var(--acid); }
+@keyframes marquee { to { transform:translateX(-50%); } }
+
+.section { padding:110px 5vw; border-bottom:1px solid var(--line); }
+.section-label { color:#74747e; font-size:11px; letter-spacing:.18em; font-weight:800; margin-bottom:48px; }
+.about-grid { display:grid; grid-template-columns:1.1fr .9fr; gap:8vw; }
+.about h2,.tokenomics h2,.roadmap h2,.buy-section h2 { font-size:clamp(44px,6.5vw,104px); line-height:.9; letter-spacing:-.06em; }
+.about h2 span { color:var(--acid); }
+.about-copy { max-width:620px; }
+.about-copy p { color:#b9b9c1; font-size:18px; line-height:1.8; margin:0 0 24px; }
+
+.tokenomics { background:linear-gradient(180deg,#0d0d10,#101014); }
+.stats-grid { display:grid; grid-template-columns:2fr repeat(3,1fr); gap:12px; margin-top:48px; }
+.stat-card { min-height:230px; border:1px solid var(--line); background:var(--panel); padding:26px; display:flex; flex-direction:column; justify-content:space-between; }
+.stat-card.featured { background:var(--acid); color:#0a0a0a; }
+.stat-card small { font-size:10px; font-weight:900; letter-spacing:.13em; opacity:.72; }
+.stat-card strong { font-family:Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif; font-size:clamp(44px,5vw,80px); letter-spacing:-.06em; }
+.stat-card p { margin:0; font-size:13px; opacity:.72; }
+
+.roadmap-head { display:grid; grid-template-columns:1.2fr .8fr; gap:5vw; align-items:end; }
+.roadmap-head p { color:#aaaab3; line-height:1.7; max-width:500px; }
+.roadmap-list { margin-top:56px; border-top:1px solid var(--line); }
+.road-item { display:grid; grid-template-columns:80px 1fr 1.4fr; gap:24px; align-items:center; padding:28px 0; border-bottom:1px solid var(--line); color:#8e8e98; }
+.road-item span { font-family:Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif; color:#54545c; }
+.road-item h3 { font-size:24px; }
+.road-item p { margin:0; line-height:1.6; }
+.road-item.active { color:#f3f3ef; }
+.road-item.active span,.road-item.active h3 { color:var(--acid); }
+
+.buy-section { padding:100px 5vw; display:flex; align-items:end; justify-content:space-between; gap:30px; background:var(--acid); color:#080808; }
+.buy-section small { font-weight:900; letter-spacing:.15em; }
+.buy-section .btn-primary { background:#090909; color:#fff; box-shadow:none; }
+.big { padding:22px 28px; }
+
+footer { padding:34px 5vw; display:flex; justify-content:space-between; align-items:center; gap:20px; color:#777781; font-size:12px; }
+footer div { display:flex; gap:20px; font-weight:800; }
+footer a:hover { color:var(--acid); }
+
+.reveal { opacity:0; transform:translateY(20px); transition:.7s ease; }
+.reveal.visible { opacity:1; transform:none; }
+
+@media (max-width: 900px) {
+  .nav { display:none; }
+  .hero { grid-template-columns:1fr; padding-top:70px; }
+  .hero-art { min-height:440px; }
+  .coin { width:min(66vw,330px); }
+  .about-grid,.roadmap-head { grid-template-columns:1fr; }
+  .stats-grid { grid-template-columns:1fr 1fr; }
+  .stat-card.featured { grid-column:1/-1; }
+  .road-item { grid-template-columns:50px 1fr; }
+  .road-item p { grid-column:2; }
+  .buy-section { align-items:flex-start; flex-direction:column; }
+}
+
+@media (max-width: 560px) {
+  .topbar { padding:0 20px; }
+  .buy-small { display:none; }
+  .hero,.section,.buy-section,footer { padding-left:20px; padding-right:20px; }
+  h1 { font-size:18vw; }
+  .hero-art { min-height:360px; }
+  .contract-box { align-items:flex-start; flex-direction:column; }
+  .contract-box button { width:100%; }
+  .stats-grid { grid-template-columns:1fr; }
+  .stat-card.featured { grid-column:auto; }
+  .road-item { grid-template-columns:40px 1fr; }
+  footer { flex-direction:column; align-items:flex-start; }
+}
+
+  
+/* final polish */
+::selection{background:var(--acid);color:#080808}
+.brand-mark{border-radius:8px;box-shadow:0 0 28px rgba(216,255,53,.18)}
+.stat-card,.road-item,.contract-box,.icon-link,.btn{transition:transform .2s ease,border-color .2s ease,background .2s ease}
+.stat-card:hover,.road-item:hover{transform:translateY(-3px);border-color:rgba(216,255,53,.35)}
+.contract-box{border-color:rgba(216,255,53,.32);box-shadow:inset 0 0 40px rgba(216,255,53,.025)}
+.hero-text{max-width:650px}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important;transition-duration:.01ms!important}}
+</style>
 </head>
 <body>
   <div class="noise"></div>
 
   <header class="topbar">
-    <div class="wrap nav">
-      <a class="brand" href="#top"><span class="mark">V</span><span>VMAX</span></a>
-      <nav class="links">
-        <a href="#about">About</a>
-        <a href="#tokenomics">Tokenomics</a>
-        <a href="#roadmap">Roadmap</a>
-        <a href="#launch">Launch</a>
-      </nav>
-      <a class="navcta" href="#launch">ENTER MAX MODE ↗</a>
+    <a href="#top" class="brand" aria-label="VMAX home">
+      <span class="brand-mark">V</span>
+      <span>VMAX</span>
+    </a>
+    <nav class="nav">
+      <a href="#about">About</a>
+      <a href="#tokenomics">Tokenomics</a>
+      <a href="#roadmap">Roadmap</a>
+    </nav>
+    <div class="nav-actions">
+      <a class="icon-link" href="https://x.com/" target="_blank" rel="noreferrer" aria-label="X">X</a>
+      <a class="buy-small" href="#launch">ENTER MAX MODE ↗</a>
     </div>
   </header>
 
   <main id="top">
-    <div class="wrap hero">
-      <div>
-        <div class="eyebrow"><span class="dot"></span> Built on Solana</div>
-        <h1>NO BRAKES.<br><span class="stroke">JUST VMAX.</span></h1>
-        <p class="lead">A fast, loud and community-first memecoin built for maximum meme energy. Launching on Pump.fun — contract address drops at launch.</p>
-        <div class="hero-actions">
-          <a class="btn primary" href="#launch">LAUNCHING ON PUMP.FUN ↗</a>
-          <a class="btn secondary" href="#about">WHAT IS VMAX?</a>
+    <section class="hero">
+      <div class="hero-copy">
+        <div class="eyebrow"><span></span> BUILT ON SOLANA</div>
+        <h1>NO BRAKES.<br><em>JUST VMAX.</em></h1>
+        <p class="hero-text">A fast, loud and community-first memecoin made for people who never choose the slow lane.</p>
+        <div class="hero-buttons">
+          <a href="#launch" class="btn btn-primary">LAUNCH SOON <span>↗</span></a>
+          <a href="#tokenomics" class="btn btn-ghost">VIEW TOKENOMICS</a>
         </div>
-        <div class="micro">No presale • No private round • CA published only after mint</div>
+        <div class="contract-box">
+          <div>
+            <small>CONTRACT ADDRESS</small>
+            <code id="contract">CA COMING AT LAUNCH</code>
+          </div>
+          <button id="copyBtn" aria-label="Copy contract address">COPY</button>
+        </div>
       </div>
 
-      <div class="card">
+      <div class="hero-art" aria-hidden="true">
+        <div class="speed-ring ring-one"></div>
+        <div class="speed-ring ring-two"></div>
+        <div class="speed-ring ring-three"></div>
         <div class="coin">
-          <div class="badge">PRE-LAUNCH</div>
-          <div class="vmark">V</div>
+          <div class="coin-inner">V</div>
         </div>
-        <div class="ticker">
-          <span>NETWORK <b>SOLANA</b></span>
-          <span>MODE <b>VMAX</b></span>
-          <span>STATUS <b>READY</b></span>
-        </div>
+        <div class="tag tag-one">MAX MODE</div>
+        <div class="tag tag-two">100% MEME</div>
       </div>
-    </div>
+    </section>
 
-    <div class="marquee">
-      <div class="track">
-        <span><i>●</i> VMAX MODE</span><span>BUILT ON SOLANA</span><span><i>●</i> COMMUNITY FIRST</span><span>LAUNCHING ON PUMP.FUN</span><span><i>●</i> NO BRAKES</span>
-        <span><i>●</i> VMAX MODE</span><span>BUILT ON SOLANA</span><span><i>●</i> COMMUNITY FIRST</span><span>LAUNCHING ON PUMP.FUN</span><span><i>●</i> NO BRAKES</span>
+    <section class="ticker-strip" aria-label="VMAX features">
+      <div class="ticker-track">
+        <span>ZERO SLOW MODE</span><b>✦</b><span>COMMUNITY POWERED</span><b>✦</b><span>SOLANA SPEED</span><b>✦</b><span>VMAX ONLY</span><b>✦</b>
+        <span>ZERO SLOW MODE</span><b>✦</b><span>COMMUNITY POWERED</span><b>✦</b><span>SOLANA SPEED</span><b>✦</b><span>VMAX ONLY</span><b>✦</b>
       </div>
-    </div>
+    </section>
 
-    <section id="about">
-      <div class="wrap">
-        <div class="section-head">
-          <div>
-            <div class="kicker">01 / About</div>
-            <h2>BUILT TO MOVE.</h2>
-          </div>
-          <p class="section-copy">VMAX is a meme-first Solana project with one simple idea: keep the energy high, the branding clean and the community moving. No overcomplicated promises — just maximum mode.</p>
-        </div>
-        <div class="grid3">
-          <div class="stat"><div class="big">SOL</div><p>Fast chain. Low friction. Built where meme culture already moves.</p></div>
-          <div class="stat"><div class="big">0%</div><p>No buy tax. No sell tax. Keep it simple.</p></div>
-          <div class="stat"><div class="big">MAX</div><p>Community, memes and momentum over empty buzzwords.</p></div>
+    <section class="section about" id="about">
+      <div class="section-label">01 / ABOUT</div>
+      <div class="about-grid">
+        <h2>MEME COIN.<br><span>FULL THROTTLE.</span></h2>
+        <div class="about-copy">
+          <p>VMAX started with one idea: keep it simple, keep it fast, and let the community push it forward.</p>
+          <p>No complicated promises. No corporate costume. Just a Solana-native meme with a clean identity, strong community energy and room to grow.</p>
         </div>
       </div>
     </section>
 
-    <section id="tokenomics">
-      <div class="wrap">
-        <div class="section-head">
-          <div>
-            <div class="kicker">02 / Tokenomics</div>
-            <h2>CLEAN SETUP.</h2>
-          </div>
-          <p class="section-copy">The final mint address and exact launch details will be published only after the Pump.fun token is created.</p>
-        </div>
-        <div class="grid3">
-          <div class="stat"><div class="big">0%</div><p>Buy tax</p></div>
-          <div class="stat"><div class="big">0%</div><p>Sell tax</p></div>
-          <div class="stat"><div class="big">SOL</div><p>Native chain</p></div>
-        </div>
-        <div class="ca">
-          <div>
-            <div class="kicker">Contract address</div>
-            <code id="ca">CA COMING AT LAUNCH</code>
-          </div>
-          <button class="btn secondary" onclick="copyCA()">COPY CA</button>
-        </div>
+    <section class="section tokenomics" id="tokenomics">
+      <div class="section-label">02 / TOKENOMICS</div>
+      <h2>THE NUMBERS</h2>
+      <div class="stats-grid">
+        <article class="stat-card featured">
+          <small>TOTAL SUPPLY</small>
+          <strong>1B</strong>
+          <p>One billion VMAX. Fixed supply.</p>
+        </article>
+        <article class="stat-card">
+          <small>BUY TAX</small>
+          <strong>0%</strong>
+          <p>No buy tax.</p>
+        </article>
+        <article class="stat-card">
+          <small>SELL TAX</small>
+          <strong>0%</strong>
+          <p>No sell tax.</p>
+        </article>
+        <article class="stat-card">
+          <small>CHAIN</small>
+          <strong>SOL</strong>
+          <p>Powered by Solana.</p>
+        </article>
       </div>
     </section>
 
-    <section id="roadmap">
-      <div class="wrap">
-        <div class="section-head">
-          <div>
-            <div class="kicker">03 / Roadmap</div>
-            <h2>FROM ZERO<br>TO VMAX.</h2>
-          </div>
-          <p class="section-copy">Keep momentum. Build community. Expand only when it makes sense.</p>
-        </div>
-        <div class="road">
-          <div class="step"><div class="num">01</div><h3>IGNITION</h3><p>Website, socials, final brand setup and launch preparation.</p></div>
-          <div class="step"><div class="num">02</div><h3>TRACTION</h3><p>Pump.fun launch, memes, community growth and real-time momentum.</p></div>
-          <div class="step"><div class="num">03</div><h3>MAX MODE</h3><p>Community-driven expansion, integrations and opportunities that actually fit the project.</p></div>
-        </div>
+    <section class="section roadmap" id="roadmap">
+      <div class="section-label">03 / ROADMAP</div>
+      <div class="roadmap-head">
+        <h2>FROM ZERO<br>TO VMAX.</h2>
+        <p>Keep momentum. Build community. Expand only when it makes sense.</p>
+      </div>
+      <div class="roadmap-list">
+        <div class="road-item active"><span>01</span><h3>IGNITION</h3><p>Launch, website, socials and first community wave.</p></div>
+        <div class="road-item"><span>02</span><h3>TRACTION</h3><p>Community growth, content, listings and collaborations.</p></div>
+        <div class="road-item"><span>03</span><h3>MAX MODE</h3><p>Push VMAX further with community-driven expansion.</p></div>
       </div>
     </section>
 
-    <section id="launch">
-      <div class="wrap">
-        <div class="launch">
-          <div>
-            <div class="kicker">Ready?</div>
-            <h3>ENTER<br>MAX MODE.</h3>
-            <p>VMAX launches on Pump.fun. The real mint address and buy link will appear here immediately after creation.</p>
-          </div>
-          <a class="btn primary" href="https://pump.fun" target="_blank" rel="noopener">PUMP.FUN ↗</a>
-        </div>
+    <section class="buy-section" id="launch">
+      <div>
+        <small>PUMP.FUN LAUNCH</small>
+        <h2>READY FOR<br>IGNITION.</h2>
       </div>
+      <a class="btn btn-primary big" href="#top">CA + LAUNCH LINK COMING SOON <span>↗</span></a>
     </section>
   </main>
 
   <footer>
-    <div class="wrap foot">
-      <div>© 2026 VMAX. Memes move fast.</div>
-      <div class="socials">
-        <a href="#" aria-label="X">X</a>
-        <a href="#" aria-label="Telegram">TELEGRAM</a>
-      </div>
-    </div>
+    <a href="#top" class="brand"><span class="brand-mark">V</span><span>VMAX</span></a>
+    <p>© 2026 VMAX. Memes move fast.</p>
+    <div><a href="#top">HOME</a><a href="#tokenomics">TOKENOMICS</a><a href="#roadmap">ROADMAP</a></div>
   </footer>
 
   <script>
-    function copyCA(){
-      const text = document.getElementById('ca').textContent.trim();
-      if(text === 'CA COMING AT LAUNCH'){
-        alert('Contract address will be published at launch.');
-        return;
-      }
-      navigator.clipboard.writeText(text).then(()=>alert('Contract address copied.'));
+const copyBtn = document.getElementById('copyBtn');
+const contract = document.getElementById('contract');
+
+copyBtn.addEventListener('click', async () => {
+  if (contract.textContent.includes('COMING')) { copyBtn.textContent='COMING SOON'; setTimeout(()=>copyBtn.textContent='COPY',1400); return; }
+  try {
+    await navigator.clipboard.writeText(contract.textContent.trim());
+    const old = copyBtn.textContent;
+    copyBtn.textContent = 'COPIED';
+    setTimeout(() => copyBtn.textContent = old, 1400);
+  } catch {
+    copyBtn.textContent = 'SELECT & COPY';
+  }
+});
+
+const targets = document.querySelectorAll('.section, .stat-card, .road-item');
+targets.forEach(el => el.classList.add('reveal'));
+
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+      observer.unobserve(entry.target);
     }
+  });
+}, { threshold: .12 });
+
+targets.forEach(el => observer.observe(el));
+
   </script>
 </body>
 </html>
